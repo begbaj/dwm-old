@@ -12,8 +12,10 @@ while true; do
     ramt=$(awk '/MemTotal/ {print $2}' <(cat /proc/meminfo))
     ramf=$(awk '/MemAvailable/ {print $2}' <(cat /proc/meminfo))
     ram=$(awk -v f=$ramf -v t=$ramt 'BEGIN {print ((t-f)/t)*100}')
+    nordvpn=$(awk -F"Status: " '{ print $2}' <(nordvpn status))
+    lip=$(awk -F"inet | brd" '/enp0s/ {print $2}' <(ip addr))
 
-    prompt=" RAM : ${ram:0:5}% | cpu: ${cpu:0:5}% | 墳 : $masterVol | $dateTime | $USER"
+    prompt="LAN: ${lip:1:100} | VPN: $nordvpn | RAM : ${ram:0:5}% | CPU: ${cpu:0:5}% | 墳 : $masterVol | $dateTime | $USER"
 
     xsetroot -name "$prompt"
     sleep 1
