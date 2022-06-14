@@ -4,7 +4,7 @@ while true; do
         mkdir "$SCRIPTPATH/status"
     fi
 
-    masterVol=$(awk -F"[][]" '/Left: / { print $2 }' <(amixer -D pulse sget Master))
+    masterVol=$(awk -F"[][]" '/Left: / { print $2 $3 $4 }' <(amixer -D pulse sget Master))
     dateTime=$(date "+%d/%m/%y %H:%M:%S")  
 
     cpu=$($SCRIPTPATH/procper )
@@ -15,7 +15,7 @@ while true; do
     nordvpn=$(awk -F"Status: " '{ print $2}' <(nordvpn status))
     lip=$(awk -F"inet | brd" '/enp0s/ {print $2}' <(ip addr))
 
-    prompt="LAN: ${lip:1:100} | VPN: $nordvpn | RAM : ${ram:0:5}% | CPU: ${cpu:0:5}% | 墳 : $masterVol | $dateTime | $USER"
+    prompt="LAN: ${lip:1:100} | VPN: ${nordvpn:1:100} | RAM : ${ram:0:5}% | CPU: ${cpu:0:5}% | 墳 : $masterVol | $dateTime | $USER"
 
     xsetroot -name "$prompt"
     sleep 1
